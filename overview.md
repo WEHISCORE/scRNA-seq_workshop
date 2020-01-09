@@ -61,11 +61,4 @@ We assume that you have attended WEHI's intro to R workshops or otherwise consid
 10. Integrating datasets
 11. Multi-sample comparisons
 12. Additional topics
-  - Hashtag demultiplexing
-  - Doublet detection
-  - Cell cycle assignment
-  - Trajectory analysis
-  - Integrating with protein abundance (CITE-seq and index sorting)
-  - Repertoire sequencing (TCR and VDJ)
-  - Experimental design
 13. Recap

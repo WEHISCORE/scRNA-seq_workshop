@@ -1,0 +1,22 @@
+- Overview / motivation
+- PCA
+- Choosing the number of PCs
+  - Motivation
+  - Using the elbow point
+  - Using the technical noise
+  - Based on population structure
+    - Skip
+  - Recommendation
+  - Putting it together
+- Dimensionality reduction for visualization
+  - Motivation
+  - PCA
+  - t-SNE
+    - Parameters
+    - Stochastic nature
+  - UMAP
+    - Parameters
+    - Stochastic nature
+  - Other
+  - Recommendation
+- Interpreting t-SNE / UMAP

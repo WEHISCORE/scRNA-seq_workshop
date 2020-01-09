@@ -1,0 +1,20 @@
+- Motivation
+  - Visualization
+    - Library size
+    - Composition biases
+    - Sparsity
+  - Size factors
+- Library size normalization
+  - Simple to explain but not the best
+- Normalization by deconvolution
+  - Conceptually similar to library size normalization but better behaved
+- Applying size factors
+  - Scaling and log-transforming
+  - Downsampling and log-transforming
+    - Skip?
+- Advanced / boutique normalization
+  - Normalization by spike-in
+  - Gene-specific normalization factors / variance stabilizing transformations
+- Recommendation
+  - Deconvolution normalization is good default
+    - Cite benchmark studies

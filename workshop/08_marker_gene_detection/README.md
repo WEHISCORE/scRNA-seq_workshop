@@ -1,0 +1,16 @@
+- Motivation
+- Using pairwise t-tests
+  - Standard application
+  - Using the log-fold change
+  - Finding cluster-specific markers
+- Alternative testing regimes
+  - Wilcoxon rank sum test
+  - Binomial test
+  - Custom / advanced DE methods
+  - Recommendation
+- Handling blocking factors
+- Statistical issues (the invalidity of P-values)
+  - Avoid details, emphasise concepts
+    - Data snooping
+    - Nature of replication
+- Further comments

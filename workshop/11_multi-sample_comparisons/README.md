@@ -1,0 +1,14 @@
+- Motivation
+- Differential expression between conditions
+  - Pseudobulk samples
+  - Performing DE analysis
+    - "Just" bulk RNA-seq methods + a loop over the clusters
+- Differential abundance between conditions
+  - Overview
+  - Performing DA analysis
+  - Composition effects
+    - Skip?
+- DE and DA are two signs of the same coin
+  - Illustrate with picture
+- Complications from ambient RNA
+  - Skip

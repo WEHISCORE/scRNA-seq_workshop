@@ -1,0 +1,6 @@
+  - Hashtag demultiplexing
+  - Doublet detection
+  - Cell cycle assignment
+  - Trajectory analysis
+  - Integrating with protein abundance (CITE-seq and index sorting)
+  - Repertoire sequencing (TCR and VDJ)

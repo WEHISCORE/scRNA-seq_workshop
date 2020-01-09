@@ -1,0 +1,8 @@
+- Intro to single-cell tech
+  - See Luyi's slides from Nanjing
+- Why R / Bioconductor
+  - OSCA
+- Experimental design
+- Obtaining a count matrix
+- Data processing and downstream analysis
+  - Illustrate with quick start example? Or perhaps put this in the recap?

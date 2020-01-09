@@ -1,0 +1,11 @@
+- Motivation
+- Diagnosing batch effects
+- Linear regression
+  - Skip?
+- MNN
+  - Algorithm (concept)
+  - Diagnostics
+  - Preserving biological heterogeneity
+- Other options
+- Recommendation
+- Using corrected values

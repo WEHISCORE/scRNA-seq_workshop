@@ -1,0 +1,15 @@
+- Motivation
+- Quantifying per-gene variation
+  - Variance of log-counts
+  - Coefficient of variation
+    - Skip
+  - Quantifying technical noise
+  - Accounting for blocking factors
+  - Recommendation
+- Selecting highly variable genes
+  - Top-n genes approach
+  - Statistical significance approach
+  - Keeping all genes above the trend
+  - Based on *a priori* genes of interest
+  - Recommendation
+- Putting it all together

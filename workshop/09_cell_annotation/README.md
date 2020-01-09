@@ -1,0 +1,10 @@
+- Motivation
+- Assigning cell labels from reference data
+  - Overview
+    - SingleR
+  - Using the built-in references
+  - Using custom references
+- Assigning cell labels from gene sets
+- Assigning cluster labels from markers
+- Computing gene set activities
+  - Skip?

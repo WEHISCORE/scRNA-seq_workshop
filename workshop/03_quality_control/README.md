@@ -1,0 +1,10 @@
+- Motivation
+  - Identifying / removing bad samples and bad features
+- Choice of QC metrics
+- Identifying low-quality cells
+- Checking diagnostic plots
+  - Per technical covariates (e.g., plate, batch)
+  - Per biological covariates (e.g., donor, FACS gating)
+- Cell calling for droplet data
+- Removing low-quality cells
+- Marking low-quality cells

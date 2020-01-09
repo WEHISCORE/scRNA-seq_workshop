@@ -1,0 +1,10 @@
+- Motivation
+- What is the 'true' clustering?
+- Graph-based clustering
+  - aka 'Seurat' clustering
+- k-means clustering
+  - Skip?
+- Hierarchical clustering
+  - Skip?
+- Recommendation
+- Subclustering
