@@ -1,3 +1,10 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
 # Single-Cell RNA-seq Analysis with Bioconductor Workshop
 
 This 2-day workshop is based on the free e-book, ['Orchestrating Single-Cell Analysis with Bioconductor'](https://osca.bioconductor.org), and the analysis strategies used by WEHI's Single Cell Open Research Endeavour (SCORE).
@@ -40,11 +47,11 @@ Thus, it goes without saying that you may not learn the optimal workflow for you
 ## Expectations
 
 This workshop assumes some familiarity with R.
-We assume that you have attended WEHI's intro to R workshops or otherwise consider yourself to be able to use R.
+We assume that you have attended WEHI's Introduction to R workshops or otherwise consider yourself to be able to use R.
 
-## Course structure
+## Schedule (tentative)
 
-### Day 1
+### Day 1 (25 February 2020)
 
 1. Introduction
 2. Data infrastructure and import
@@ -53,7 +60,7 @@ We assume that you have attended WEHI's intro to R workshops or otherwise consid
 5. Feature selection
 6. Dimensionality reduction
 
-### Day 2
+### Day 2 (26 February 2020)
 
 7. Clustering
 8. Marker gene detection
@@ -62,3 +69,7 @@ We assume that you have attended WEHI's intro to R workshops or otherwise consid
 11. Multi-sample comparisons
 12. Additional topics
 13. Recap
+
+## Instructor
+
+The workshop will be taught be Dr. Peter Hickey, who leads the bioinformatics team in WEHI's Single Cell Open Research Endeavour (SCORE).
