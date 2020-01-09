@@ -1,11 +1,11 @@
 ---
 output:
-  pdf_document: default
   word_document: default
+  pdf_document: default
   html_document: default
 ---
 
-# Single-Cell RNA-seq Analysis with Bioconductor Workshop
+# Single-Cell RNA-seq Analysis Workshop
 
 This 2-day workshop is based on the free e-book, ['Orchestrating Single-Cell Analysis with Bioconductor'](https://osca.bioconductor.org), and the analysis strategies used by WEHI's Single Cell Open Research Endeavour (SCORE).
 The workshop will focus on software tools available through [Bioconductor](https://bioconductor.org/).
