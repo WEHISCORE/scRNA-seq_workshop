@@ -1,60 +1,71 @@
-# scRNA-seq workshop
+# Single-Cell RNA-seq Analysis with Bioconductor Workshop
 
-The workshop will be based on https://osca.bioconductor.org.
-Some of the course structure may be adapted from https://combine-australia.github.io/2018-09-26-RNAseq-Melbourne/.
+This 2-day workshop is based on the free e-book, ['Orchestrating Single-Cell Analysis with Bioconductor'](https://osca.bioconductor.org), and the analysis strategies used by WEHI's Single Cell Open Research Endeavour (SCORE).
+The workshop will focus on software tools available through [Bioconductor](https://bioconductor.org/).
+Bioconductor is an open source, open development software project to provide tools for the analysis and comprehension of high-throughput genomic data.
+It is based primarily on the R programming language.
 
-## Date(s)
+## Who this workshop is for
 
-This workshop requires BioC 3.10, which will be released on 2019-10-30, so I propose the workshop is held in mid-November.
-
-**TODO**: ~Propose running the workshop between Nov 11-28.~ Now pushed to February/March 2020.
-
-I would like to teach as a 2-day workshop.
-This is motivated by the Hemberg lab's scRNA-seq workshop and the COMBINE RNA-seq workshop, both of which run over two days.
+This workshop is designed with the interested experimental biologist in mind, and we will do our best to make few assumptions on previous programming or statistical experience.
+Likewise, we also welcome more seasoned bioinformaticians who are looking for a starting point from which to dive into single-cell RNA-seq analysis.
 
 ## What you will learn
 
-> The goal of this ~~book~~ workshop is to provide a solid foundation in the usage of Bioconductor tools for single-cell RNA-seq analysis by walking through various steps of typical workflows using example datasets. We strive to tackle key concepts covered in the manuscript, [“Orchestrating Single-Cell Analysis with Bioconductor”](https://www.biorxiv.org/content/10.1101/590562v1), with each workflow covering these in varying detail, as well as essential preliminaries that are important for following along with the workflows on your own.
+The goal of this workshop is to provide a solid foundation in the usage of Bioconductor tools for single-cell RNA-seq analysis by walking through various steps of typical workflows using example datasets. 
+Our examples are taken from a range of commonly used single-cell RNA-seq technologies, such as the 10X Genomics Chromium Single Cell Gene Expression and the CEL-Seq2 platforms, applied to a variety of human and mouse experimental systems.
+
+All workflows begin with *data import* and subsequent *quality control* and *normalization*, going from a raw (count) expression matrix to a 'clean' one.
+This includes adjusting for experimental factors and complications such as batch effects.
+Using the clean expression matrix, *feature selection* strategies can be applied to select the features (genes) driving heterogeneity.
+Furthermore, these features can then be used to perform *dimensionality reduction*, which enables downstream analysis that would not otherwise be possible and visualization in 2 or 3 dimensions.
+
+From there, the workflows largely focus on differing downstream analyses.
+*Clustering* details how to segment a single-cell RNA-seq dataset, and *differential expression* provides a means to determine what drives the differences between different groups of cells.
+*Integrating datasets* walks through merging scRNA-seq datasets, an area of need as the number of scRNA-seq datasets continues to grow and comparisons between datasets must be done.
+
+At each step in the workflow, we will pay special attention to data visualization, including interactive visualization, to help guide us in our analysis decisions and to interpret the results of our analysis.
 
 ## What you won’t learn
 
-> The field of bioinformatic analysis is large and filled with many potential trajectories depending on the biological system being studied and technology being deployed. Here, we only briefly survey some of the many tools available for the analysis of scRNA-seq, focusing on Bioconductor packages. It is impossible to thoroughly review the plethora of tools available through R and Bioconductor for biological analysis in one ~~book~~ workshop, but we hope to provide the means for further exploration on your own.
->
-> Thus, it goes without saying that you may not learn the optimal workflow for your own data from our examples - while we strive to provide high quality templates, they should be treated as just that - a template from which to extend upon for your own analyses.
+This workshop focuses on the downstream analysis of scRNA-seq data and our workflows will start from a raw (count) expression matrix, such as that created by 10X Genomics' CellRanger software.
+We will therefore not be learning to run CellRanger (or similar software) that construct the count matrix from the raw sequencing files, although we will introduce these tools, explain when to use which, and link to tutorials.
 
-- I assume that you have attended WEHI's intro R workshops or otherwise consider yourself to be able to use R
-    - **TODO**: Check what is taught in WEHI's intro to R workshops
-- We won't run CellRanger, scPipe, alevin, STARsolo, kalisto | bustools, etc. but I will introduce them, explain when to use which, and link to tutorials.
+The field of bioinformatic analysis is large and filled with many potential trajectories depending on the biological system being studied and technology being deployed.
+Here, we only briefly survey some of the many tools available for the analysis of scRNA-seq, focusing on Bioconductor packages.
+It is impossible to thoroughly review the plethora of tools available through R and Bioconductor for biological analysis in one workshop, but we aim to provide the means for further exploration on your own.
 
-## Content
+Thus, it goes without saying that you may not learn the optimal workflow for your own data from our examples; while we strive to provide high quality templates, they should be treated as just that, a template from which to extend upon for your own analyses.
 
-### Session 1
+## Expectations
 
-1. Overview
-2. Data Infrastructure
-    - Abbreviate from OSCA
+This workshop assumes some familiarity with R.
+We assume that you have attended WEHI's intro to R workshops or otherwise consider yourself to be able to use R.
+
+## Course structure
+
+### Day 1
+
+1. Introduction
+2. Data infrastructure and import
 3. Quality control
 4. Normalization
 5. Feature selection
 6. Dimensionality reduction
-7. Interactive interfaces
 
-### Session 2
+### Day 2
 
-8. Clustering
-9. Marker gene detection
-10. Cell type annotation
-11. Integrating datasets
-12. Multi-sample comparisons
-13. Doublet detection
-14. Other resources
-
-## Format
-
-I'd like to present from within RStudio, writing code as we go.
-This might be supplemented by Google Slides.
-
-Everyone will be running RStudio.
-If this a WEHI-only workshop, we could use http://rstudio.hpc.wehi.edu.au.
-However, I would need to ensure sufficient resources are provisioned and that all the necessary packages are installed system-wide.
-If this is open to non-WEHI people, I will use AWS.
+7. Clustering
+8. Marker gene detection
+9. Cell type annotation
+10. Integrating datasets
+11. Multi-sample comparisons
+12. Additional topics
+  - Hashtag demultiplexing
+  - Doublet detection
+  - Cell cycle assignment
+  - Trajectory analysis
+  - Integrating with protein abundance (CITE-seq and index sorting)
+  - Repertoire sequencing (TCR and VDJ)
+  - Experimental design
+13. Recap
