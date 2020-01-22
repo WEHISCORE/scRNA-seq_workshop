@@ -1,0 +1,6 @@
+- Explain RStudio layout
+- Setup layout/theme to match that of students
+- Explain keyboard shortcuts, remembering they vary on different systems
+  - Ctrl-Enter (the 'Run' button)
+  - Ctrl-l
+- Explain the `pkg::fun()` notation.
