@@ -102,3 +102,16 @@ anim <- plotColData(sce.416b, y = "sum") +
   exit_fade()
 
 anim_save(here("workshop/03_quality_control/isOutlier.gif"), anim)
+
+
+# Adaptive outlier detection using a subset ------------------------------------
+
+p1 <- plotColData(sce.grun, x="donor", y="altexps_ERCC_percent",
+            colour_by=data.frame(discard=discard.ercc)) +
+  ggtitle("Using all samples to compute thresholds") +
+  theme_cowplot()
+p2 <- plotColData(sce.grun, x="donor", y="altexps_ERCC_percent",
+            colour_by=data.frame(discard=discard.ercc2)) +
+  ggtitle("Using a subset of samples to compute thresholds") +
+  theme_cowplot()
+multiplot(p1, p2, cols=2)
