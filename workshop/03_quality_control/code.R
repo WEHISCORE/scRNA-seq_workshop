@@ -159,3 +159,12 @@ discard.mito <- isOutlier(sce.pmbc$subsets_MT_percent, type="higher")
 plot(sce.pmbc$sum, sce.pmbc$subsets_MT_percent, log="x",
      xlab="Total count", ylab='Mitochondrial %')
 abline(h=attr(discard.mito, "thresholds")["higher"], col="red")
+
+# Handling low-quality cells in the 416B dataset -------------------------------
+
+# Removing low-quality cells
+# Keeping the columns we DON'T want to discard
+filtered <- sce.416b[,!discard2]
+# Marking low-quality cells
+marked <- sce.416b
+marked$discard <- discard2
