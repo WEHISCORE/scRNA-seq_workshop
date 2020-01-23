@@ -4,3 +4,5 @@
   - Ctrl-Enter (the 'Run' button)
   - Ctrl-l
 - Explain the `pkg::fun()` notation.
+- Tab completion
+- R's help system and https://support.bioconductor.org/
