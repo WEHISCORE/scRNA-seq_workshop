@@ -2,6 +2,7 @@
 
 library(scRNAseq)
 sce.zeisel <- ZeiselBrainData(ensembl=TRUE)
+
 # Quality control
 library(scater)
 is.mito <- which(rowData(sce.zeisel)$featureType=="mito")
