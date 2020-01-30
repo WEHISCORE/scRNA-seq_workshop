@@ -3,6 +3,8 @@
 - Why R / Bioconductor
   - OSCA
 - Experimental design
+  - Fig. 2 of Song, F., Chan, G. M. & Wei, Y. Flexible Experimental Designs for Valid Single-cell RNA-sequencing Experiments Allowing Batch Effects Correction. bioRxiv 533372 (2019) doi:10.1101/533372 has some examples of good / bad experimental design
 - Obtaining a count matrix
 - Data processing and downstream analysis
   - Illustrate with quick start example? Or perhaps put this in the recap?
+  - Be wary of pseudoalignment methods for snRNA-seq because the default reference won't contain unspliced transcripts (could use a modified index, cf. kalisto + BUStools RNA velocity method)
