@@ -51,7 +51,7 @@ We assume that you have attended WEHI's Introduction to R workshops or otherwise
 
 ## Schedule (tentative)
 
-### Day 1 (25 February 2020)
+### Day 1 (24 February 2020)
 
 1. Introduction
 2. Data infrastructure and import
@@ -60,7 +60,7 @@ We assume that you have attended WEHI's Introduction to R workshops or otherwise
 5. Feature selection
 6. Dimensionality reduction
 
-### Day 2 (26 February 2020)
+### Day 2 (25 February 2020)
 
 7. Clustering
 8. Marker gene detection
