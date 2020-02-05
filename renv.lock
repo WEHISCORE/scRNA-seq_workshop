@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.1",
+    "Version": "3.6.2",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -99,6 +99,13 @@
       "Repository": "CRAN",
       "Hash": "4744be45519d675af66c28478720fce5"
     },
+    "DT": {
+      "Package": "DT",
+      "Version": "0.12",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0e120603cc57e4f1d741f739aa8147ba"
+    },
     "DelayedArray": {
       "Package": "DelayedArray",
       "Version": "0.12.2",
@@ -128,6 +135,13 @@
       "Version": "1.12.0",
       "Source": "Bioconductor",
       "Hash": "b8b129c93ae4b4f76c076166f1acfaca"
+    },
+    "FNN": {
+      "Package": "FNN",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b56998fff55e4a4b4860ad6e8c67e0f9"
     },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
@@ -246,6 +260,13 @@
       "Repository": "CRAN",
       "Hash": "2e813101e637bfd423f763d20350ed3d"
     },
+    "RSpectra": {
+      "Package": "RSpectra",
+      "Version": "0.16-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a41329d24d5a98eaed2bd0159adb1b5f"
+    },
     "Rcpp": {
       "Package": "Rcpp",
       "Version": "1.0.3",
@@ -260,12 +281,33 @@
       "Repository": "CRAN",
       "Hash": "b027124e169777564aedd5dc23a4a1df"
     },
+    "RcppEigen": {
+      "Package": "RcppEigen",
+      "Version": "0.3.3.7.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c6faf038ba4346b1de19ad7c99b8f94a"
+    },
     "RcppHNSW": {
       "Package": "RcppHNSW",
       "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "3224f3204b7a8be299b3f939c07025ad"
+    },
+    "RcppParallel": {
+      "Package": "RcppParallel",
+      "Version": "4.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "12c9e07854eca8814a62ebeabb16e8ef"
+    },
+    "RcppProgress": {
+      "Package": "RcppProgress",
+      "Version": "0.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "8025b5d36e7cb094049b3f8174d676a2"
     },
     "Rhdf5lib": {
       "Package": "Rhdf5lib",
@@ -284,6 +326,13 @@
       "Version": "2.2.1",
       "Source": "Bioconductor",
       "Hash": "051664357b2ad8565677f1e078715219"
+    },
+    "Rtsne": {
+      "Package": "Rtsne",
+      "Version": "0.15",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f153432c4ca15b937ccfaa40f167c892"
     },
     "S4Vectors": {
       "Package": "S4Vectors",
@@ -398,6 +447,13 @@
       "Repository": "CRAN",
       "Hash": "6b436e95723d1f0e861224dd9b094dfb"
     },
+    "colourpicker": {
+      "Package": "colourpicker",
+      "Version": "1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "98ca919385a634e5d558e6938755e0bf"
+    },
     "cowplot": {
       "Package": "cowplot",
       "Version": "1.0.0",
@@ -411,6 +467,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "0d57bc8e27b7ba9e45dba825ebc0de6b"
+    },
+    "crosstalk": {
+      "Package": "crosstalk",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4ac529753d1e529966ef675d7f0c762b"
     },
     "curl": {
       "Package": "curl",
@@ -578,6 +641,13 @@
       "Repository": "CRAN",
       "Hash": "2d7691222f82f41e93f6d30f169bd5e1"
     },
+    "htmlwidgets": {
+      "Package": "htmlwidgets",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "41bace23583fbc25089edae324de2dc3"
+    },
     "httpuv": {
       "Package": "httpuv",
       "Version": "1.5.2",
@@ -591,6 +661,12 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7146fea4685b4252ebf478978c75f597"
+    },
+    "iSEE": {
+      "Package": "iSEE",
+      "Version": "1.6.1",
+      "Source": "Bioconductor",
+      "Hash": "69d6ade84fbbc13903f8e2c9d7ed0362"
     },
     "igraph": {
       "Package": "igraph",
@@ -709,6 +785,13 @@
       "Repository": "CRAN",
       "Hash": "3d8abfab430c94a15e20eb91f052293f"
     },
+    "miniUI": {
+      "Package": "miniUI",
+      "Version": "0.1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fec5f52652d60615fdb3957b3d74324a"
+    },
     "munsell": {
       "Package": "munsell",
       "Version": "0.5.0",
@@ -793,6 +876,13 @@
       "Repository": "CRAN",
       "Hash": "8c8298583adbbe76f3c2220eef71bebc"
     },
+    "rentrez": {
+      "Package": "rentrez",
+      "Version": "1.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b359e1885edc81d4becebc4b1cf4bbf4"
+    },
     "renv": {
       "Package": "renv",
       "Version": "0.9.2",
@@ -812,6 +902,13 @@
       "Version": "2.30.1",
       "Source": "Bioconductor",
       "Hash": "413d578e76ee631eaf479d9b98841bf8"
+    },
+    "rintrojs": {
+      "Package": "rintrojs",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "15a8768183fd609cee75e4789da27621"
     },
     "rlang": {
       "Package": "rlang",
@@ -871,6 +968,27 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6ca23724bb2c804c1d0b3db4862a39c7"
+    },
+    "shinyAce": {
+      "Package": "shinyAce",
+      "Version": "0.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "402073a8a045c9f5ea096ed94e01d9ce"
+    },
+    "shinydashboard": {
+      "Package": "shinydashboard",
+      "Version": "0.7.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "133639dc106955eee4ffb8ec73edac37"
+    },
+    "shinyjs": {
+      "Package": "shinyjs",
+      "Version": "1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b40a5207b6624f6e2b8cdb50689cdb69"
     },
     "sitmo": {
       "Package": "sitmo",
@@ -948,6 +1066,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4a5081acfb7b81a572e4384a7aaf2af1"
+    },
+    "uwot": {
+      "Package": "uwot",
+      "Version": "0.1.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c27a53bacadf923ea06f322bb1d093a7"
     },
     "vctrs": {
       "Package": "vctrs",
