@@ -119,3 +119,37 @@ denoised.zeisel <- denoisePCA(sce.zeisel, technical=dec.zeisel, subset.row=top.z
 dim(reducedDim(denoised.zeisel))
 
 dec.pbmc2 <- modelGeneVar(sce.pbmc)
+denoised.pbmc2 <- denoisePCA(sce.pbmc,
+                             technical=dec.pbmc2, subset.row=top.pbmc)
+dim(reducedDim(denoised.pbmc2))
+
+# Visualizing with PCA ---------------------------------------------------------
+
+plotReducedDim(sce.zeisel, dimred="PCA")
+plotReducedDim(sce.zeisel, dimred="PCA", colour_by="level1class")
+
+# Interactive visualization with PCA -------------------------------------------
+
+library(iSEE)
+iSEE(sce.zeisel,
+     initialPanels=DataFrame(
+       Name="Reduced dimension plot 1"))
+
+# Problems with visualizing by PCA ---------------------------------------------
+
+plotReducedDim(sce.zeisel, dimred="PCA",
+               ncomponents=4, colour_by="level1class")
+
+# Visualizing with t-SNE -------------------------------------------------------
+
+set.seed(00101001101)
+sce.zeisel <- runTSNE(sce.zeisel, dimred="PCA")
+plotReducedDim(sce.zeisel, dimred="TSNE",
+               colour_by="level1class")
+
+# Visualizing with UMAP --------------------------------------------------------
+
+set.seed(1100101001)
+sce.zeisel <- runUMAP(sce.zeisel, dimred="PCA")
+plotReducedDim(sce.zeisel, dimred="UMAP",
+               colour_by="level1class")
