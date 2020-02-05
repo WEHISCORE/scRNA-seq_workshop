@@ -128,13 +128,6 @@ dim(reducedDim(denoised.pbmc2))
 plotReducedDim(sce.zeisel, dimred="PCA")
 plotReducedDim(sce.zeisel, dimred="PCA", colour_by="level1class")
 
-# Interactive visualization with PCA -------------------------------------------
-
-library(iSEE)
-iSEE(sce.zeisel,
-     initialPanels=DataFrame(
-       Name="Reduced dimension plot 1"))
-
 # Problems with visualizing by PCA ---------------------------------------------
 
 plotReducedDim(sce.zeisel, dimred="PCA",
