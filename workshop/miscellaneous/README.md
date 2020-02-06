@@ -8,3 +8,4 @@
   - `BiocManager::valid()`
   - **renv**
 - Getting help
+- `plotReducedDim(..., text_by=)`
