@@ -1,3 +1,4 @@
+library(here)
 source(here("workshop/07_clustering/code.R"))
 
 # Examples of KNN / SNN graphs and cluster detection ---------------------------
