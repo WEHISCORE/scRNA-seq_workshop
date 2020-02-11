@@ -59,16 +59,94 @@ g <- buildSNNGraph(sce.pbmc, k=10, use.dimred = "PCA")
 clust <- igraph::cluster_walktrap(g)$membership
 sce.pbmc$cluster <- factor(clust)
 
+# Motivation -------------------------------------------------------------------
+
+# Is the first gene associated with the clustering?
+plotExpression(sce.pbmc, features=rownames(sce.pbmc)[1],
+               x="cluster", colour_by="cluster")
+
+# Is the second gene associated with the clustering?
+plotExpression(sce.pbmc, features=rownames(sce.pbmc)[2],
+               x="cluster", colour_by="cluster")
+
+# Is gene 16863 associated with the clustering?
+plotExpression(sce.pbmc, features=rownames(sce.pbmc)[16863],
+               x="cluster", colour_by="cluster")
+
 # Standard application ---------------------------------------------------------
 
 library(scran)
-markers.pbmc <- findMarkers(sce.pbmc, sce.pbmc$cluster)
+markers.pbmc <- findMarkers(sce.pbmc, groups=sce.pbmc$cluster,
+                            test.type="t", pval.type="any")
 
 chosen <- "9"
 interesting <- markers.pbmc[[chosen]]
-colnames(interesting)
 
-# TODO: Figure out where this goes
+plotExpression(sce.pbmc, rownames(interesting)[1:4],
+               x="cluster", colour_by="cluster")
 
-plotExpression(sce.pbmc, rownames(interesting)[1:4], x = "cluster", colour_by = "cluster")
+best.set <- interesting[interesting$Top <= 6,]
+logFCs <- as.matrix(best.set[,-(1:3)])
+colnames(logFCs) <- sub("logFC.", "", colnames(logFCs))
+
+library(pheatmap)
+pheatmap(logFCs, breaks=seq(-5, 5, length.out=101))
+
+# Using the log-fold change ----------------------------------------------------
+
+markers.pbmc.up <- findMarkers(sce.pbmc, groups=sce.pbmc$cluster,
+                               test.type="t", direction="up", pval.type="any")
+interesting.up <- markers.pbmc.up[[chosen]]
+
+
+markers.pbmc.up2 <- findMarkers(sce.pbmc, groups=sce.pbmc$cluster,
+                                test.type="t", direction="up", lfc=1, pval.type="any")
+interesting.up2 <- markers.pbmc.up2[[chosen]]
+
+
+best.set <- interesting.up2[interesting.up2$Top <= 5,]
+logFCs <- as.matrix(best.set[,-(1:3)])
+colnames(logFCs) <- sub("logFC.", "", colnames(logFCs))
+
+pheatmap(logFCs, breaks=seq(-5, 5, length.out=101))
+
+# Finding cluster-specific marker genes ----------------------------------------
+
+markers.pbmc.up3 <- findMarkers(sce.pbmc, groups=sce.pbmc$cluster,
+                                direction="up", pval.type="all")
+interesting.up3 <- markers.pbmc.up3[[chosen]]
+
+
+# Finding cluster-specific-ish marker genes ------------------------------------
+
+markers.pbmc.up4 <- findMarkers(sce.pbmc, groups=sce.pbmc$cluster,
+                                direction="up", pval.type="some")
+interesting.up4 <- markers.pbmc.up4[[chosen]]
+
+# Wilcoxon rank sum test -------------------------------------------------------
+
+markers.pbmc.wmw <- findMarkers(sce.pbmc,
+                                groups=sce.pbmc$cluster, test.type="wilcox",
+                                direction="up", pval.type="any")
+interesting.wmw <- markers.pbmc.wmw[[chosen]]
+
+
+best.set <- interesting.wmw[interesting.wmw$Top <= 5,]
+AUCs <- as.matrix(best.set[,-(1:3)])
+colnames(AUCs) <- sub("AUC.", "", colnames(AUCs))
+
+pheatmap(AUCs, breaks=seq(0, 1, length.out=21),
+         color=viridis::viridis(21))
+
+# Binomial test ----------------------------------------------------------------
+
+markers.pbmc.binom <- findMarkers(sce.pbmc,
+                                  groups=sce.pbmc$cluster, test.type="binom",
+                                  direction="up", pval.type="any")
+interesting.binom <- markers.pbmc.binom[[chosen]]
+
+
+top.genes <- head(rownames(interesting.binom))
+plotExpression(sce.pbmc, x="cluster", features=top.genes)
+
 
