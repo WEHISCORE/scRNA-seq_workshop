@@ -97,3 +97,38 @@ combineMarkers(cd3e_ttest$statistics, cd3e_ttest$pairs, pval.type = "any")
 #         The last-ranked gene in each pairwise comparison is given a Top value of 'last' (unless it's already been given a Top value of 1, 2, ..., last - 1)
 #     Then, compute the Simes-adjusted P-value for each gene
 #     Then, compute the FDR value for each gene.
+
+# Ignoring blocking factors can lead to 'false' marker genes -------------------
+
+m.out <- findMarkers(sce.416b, groups=sce.416b$cluster,
+                     block=sce.416b$block, test.type="t", direction="up")
+demo <- m.out[["1"]]
+
+m.out2 <- m.out <- findMarkers(sce.416b, groups=sce.416b$cluster,
+                               test.type="t", direction="up")
+
+demo2 <- m.out2[["1"]]
+
+# Find genes that are 'DE' when not accounting for blocking
+i <- which(demo2$FDR < 0.05 & demo[rownames(demo2), ]$FDR > 0.05)
+
+p1 <- plotExpression(sce.416b, features=rownames(demo2)[i[1]],
+               x="cluster", colour_by="cluster") +
+  cowplot::theme_cowplot(font_size = 20) +
+  ggtitle("Ignoring experimental blocks")
+p2 <- plotExpression(sce.416b, features=rownames(demo2)[i[1]],
+               x="cluster", colour_by="cluster", other_fields = "block") +
+  facet_grid(~ block) +
+  cowplot::theme_cowplot(font_size = 20) +
+  ggtitle("Accounting for experimental blocks")
+
+cowplot::plot_grid(p1, p2, ncol = 1)
+
+# Invalidity of P-values -------------------------------------------------------
+
+library(scran)
+set.seed(0)
+y <- matrix(rnorm(100000), ncol=200)
+clusters <- kmeans(t(y), centers=2)$cluster
+out <- findMarkers(y, clusters)
+hist(out[[1]]$p.value, col="grey80", xlab="p-value", main = "findMarkers() P-values in the absence of any real clusters")
