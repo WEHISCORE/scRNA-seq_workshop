@@ -77,6 +77,18 @@ plotScoreHeatmap(pred, show.pruned=TRUE)
 
 plotScoreDistribution(pred)
 
+# Identifying genes driving annotation -----------------------------------------
+
+sce.pbmc$labels <- pred$labels
+all.markers <- metadata(pred)$de.genes
+lab <- "B-cells"
+# Get top-10 marker genes for B-cells compared to each other cell
+# type
+top.markers <- Reduce(union, sapply(all.markers[[lab]], head, 10))
+
+plotHeatmap(sce.pbmc, order_columns_by="labels",
+            features=top.markers, center=TRUE, zlim=c(-3, 3), main=lab)
+
 # Comparing to clustering ------------------------------------------------------
 
 plotScoreHeatmap(pred, clusters = sce.pbmc$cluster, order.by.clusters = TRUE)
@@ -93,3 +105,52 @@ pheatmap(prop.table(tab, margin=2),
 # 1 cell.
 pheatmap(log2(tab+10),
          color=colorRampPalette(c("white", "blue"))(101))
+
+# Additional material ----------------------------------------------------------
+
+# NOTE: I could use this for 'Assigning cluster labels from markers' and
+#       'Computing gene set activities'. This uses the PBMC 4k dataset rather
+#       than introducing additional datasets. However, these examples are
+#       somewhat more involved (i.e. fewer simple function calls), so may not
+#       be great in a workshop setting.
+
+markers.pbmc <- findMarkers(sce.pbmc, sce.pbmc$cluster, direction="up", lfc=1)
+
+chosen <- "2"
+cur.markers <- markers.pbmc[[chosen]]
+is.de <- cur.markers$FDR <= 0.05
+summary(is.de)
+
+# goana() requires Entrez IDs, some of which map to multiple
+# symbols - hence the unique() in the call below.
+library(org.Hs.eg.db)
+entrez.ids <- mapIds(org.Hs.eg.db, keys=rownames(cur.markers),
+                     column="ENTREZID", keytype="SYMBOL")
+
+library(limma)
+go.out <- goana(unique(entrez.ids[is.de]), species="Hs",
+                universe=unique(entrez.ids))
+
+# Only keeping biological process terms that are not overly general.
+go.out <- go.out[order(go.out$P.DE),]
+go.useful <- go.out[go.out$Ont=="BP" & go.out$N <= 200,]
+head(go.useful, 20)
+
+plotExpression(sce.pbmc, features=c("CD79A", "CD79B"),
+               x="cluster", colour_by="cluster")
+
+# Extract symbols for each GO term; done once.
+tab <- select(org.Hs.eg.db, keytype="SYMBOL",
+              keys=rownames(sce.pbmc), columns="GOALL")
+by.go <- split(tab[,1], tab[,2])
+
+# Identify genes associated with an interesting term.
+b_cell_differentiation <- unique(by.go[["GO:0030183"]])
+head(cur.markers[rownames(cur.markers) %in% b_cell_differentiation,1:4], 10)
+
+aggregated <- sumCountsAcrossFeatures(sce.mam, by.go,
+                                      exprs_values="logcounts", average=TRUE)
+dim(aggregated) # rows are gene sets, columns are cells
+
+
+plotColData(sce.pbmc, y=I(aggregated["GO:0030183",]), x="cluster")

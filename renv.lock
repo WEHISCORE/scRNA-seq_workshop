@@ -346,6 +346,12 @@
       "Source": "Bioconductor",
       "Hash": "cfacead44b3a501a8d782af94cc7e2c9"
     },
+    "SingleR": {
+      "Package": "SingleR",
+      "Version": "1.0.5",
+      "Source": "Bioconductor",
+      "Hash": "4c3b89e8638ac6227d286198a917e090"
+    },
     "SummarizedExperiment": {
       "Package": "SummarizedExperiment",
       "Version": "1.16.1",
@@ -801,10 +807,10 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-143",
+      "Version": "3.1-144",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "7518d3b54a24f9291735a25467997858"
+      "Hash": "e80d41932d3cc235ccbbbb9732ae162e"
     },
     "openssl": {
       "Package": "openssl",
@@ -812,6 +818,12 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "49f7258fd86ebeaea1df24d9ded00478"
+    },
+    "org.Hs.eg.db": {
+      "Package": "org.Hs.eg.db",
+      "Version": "3.10.0",
+      "Source": "Bioconductor",
+      "Hash": "5201dd022e5d661d2634c95fee2cea91"
     },
     "pheatmap": {
       "Package": "pheatmap",
