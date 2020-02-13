@@ -149,6 +149,10 @@ interesting.binom <- markers.pbmc.binom[[chosen]]
 top.genes <- head(rownames(interesting.binom))
 plotExpression(sce.pbmc, x="cluster", features=top.genes)
 
+# Illustrative dataset: 416B ---------------------------------------------------
+
+# TODO: Need to insert this code if I want to include the subsequent example
+
 # Handling blocking factors ----------------------------------------------------
 
 m.out <- findMarkers(sce.416b, groups=sce.416b$cluster,

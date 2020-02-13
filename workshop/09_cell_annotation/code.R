@@ -148,7 +148,7 @@ by.go <- split(tab[,1], tab[,2])
 b_cell_differentiation <- unique(by.go[["GO:0030183"]])
 head(cur.markers[rownames(cur.markers) %in% b_cell_differentiation,1:4], 10)
 
-aggregated <- sumCountsAcrossFeatures(sce.mam, by.go,
+aggregated <- sumCountsAcrossFeatures(sce.pbmc, by.go,
                                       exprs_values="logcounts", average=TRUE)
 dim(aggregated) # rows are gene sets, columns are cells
 
