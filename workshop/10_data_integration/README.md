@@ -1,7 +1,7 @@
 - Motivation
 - Diagnosing batch effects
 - Linear regression
-  - Skip?
+  - Skip? No, think it's worth doing.
 - MNN
   - Algorithm (concept)
   - Diagnostics
