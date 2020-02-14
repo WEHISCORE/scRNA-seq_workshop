@@ -100,3 +100,21 @@ tab <- table(Cluster=clusters, Batch=uncorrected$batch)
 set.seed(1111001)
 uncorrected <- runTSNE(uncorrected, dimred="PCA")
 plotTSNE(uncorrected, colour_by="batch")
+
+# Linear regression ------------------------------------------------------------
+
+library(batchelor)
+rescaled <- rescaleBatches(pbmc3k, pbmc4k)
+
+set.seed(1010101010)
+rescaled <- runPCA(rescaled, subset_row=chosen.hvgs,
+                   exprs_values="corrected")
+
+snn.gr <- buildSNNGraph(rescaled, use.dimred="PCA")
+clusters.resc <- igraph::cluster_walktrap(snn.gr)$membership
+tab.resc <- table(Cluster=clusters.resc,
+                  Batch=rescaled$batch)
+
+rescaled <- runTSNE(rescaled, dimred="PCA")
+rescaled$batch <- factor(rescaled$batch)
+plotTSNE(rescaled, colour_by="batch")
