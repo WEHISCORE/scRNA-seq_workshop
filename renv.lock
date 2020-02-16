@@ -392,6 +392,12 @@
       "Repository": "CRAN",
       "Hash": "e9f705633dc932bfd5b02b17a5053a06"
     },
+    "batchelor": {
+      "Package": "batchelor",
+      "Version": "1.2.4",
+      "Source": "Bioconductor",
+      "Hash": "a8d0dc0d9bb3afcd93cfeafc8e4234ba"
+    },
     "beachmat": {
       "Package": "beachmat",
       "Version": "2.2.1",
