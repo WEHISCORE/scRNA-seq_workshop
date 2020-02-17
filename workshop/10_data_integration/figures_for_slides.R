@@ -1,3 +1,64 @@
+# Setup ------------------------------------------------------------------------
+
+library(here)
+library(cowplot)
+
+source(here("workshop", "10_data_integration", "code.R"))
+
+# Linear regression vs MNN correction ------------------------------------------
+
+plot_grid(
+  plotTSNE(uncorrected, colour_by="batch") +
+    theme_cowplot(font_size = 24) +
+    ggtitle("No correction"),  plotTSNE(rescaled, colour_by="batch") +
+    theme_cowplot(font_size = 24) +
+    ggtitle("Linear regression"),
+  plotTSNE(mnn.out, colour_by="batch") +
+    theme_cowplot(font_size = 24) +
+    ggtitle("MNN correction"),
+  ncol = 3)
+
+# Comparison to within-batch clusters ------------------------------------------
+
+library(pheatmap)
+
+# For the first batch (adding +10 for a smoother color transition
+# from zero to non-zero counts for any given matrix entry).
+tab <- table(paste("after", clusters.mnn[rescaled$batch==1]),
+             paste("before", pbmc3k$cluster))
+tab <- tab[paste("after", seq(min(clusters.mnn), max(clusters.mnn))),
+           paste("before", levels(pbmc3k$cluster))]
+heat3k <- pheatmap(log10(tab+10), cluster_row=FALSE, cluster_col=FALSE,
+                   main="PBMC 3K comparison", silent=TRUE, fontsize = 20)
+
+# For the second batch.
+tab <- table(paste("after", clusters.mnn[rescaled$batch==2]),
+             paste("before", pbmc4k$cluster))
+tab <- tab[paste("after", seq(min(clusters.mnn), max(clusters.mnn))),
+           paste("before", levels(pbmc4k$cluster))]
+heat4k <- pheatmap(log10(tab+10), cluster_row=FALSE, cluster_col=FALSE,
+                   main="PBMC 4K comparison", silent=TRUE, fontsize = 20)
+
+gridExtra::grid.arrange(heat3k[[4]], heat4k[[4]], ncol = 2)
+
+# Using the corrected values ---------------------------------------------------
+
+plot_grid(
+  plotTSNE(
+    mnn.out,
+    colour_by=data.frame(ENSG00000177954 = logcounts(uncorrected)["ENSG00000177954", ]),
+    text_by=I(clusters.mnn)) +
+    ggtitle("Raw") +
+    theme_cowplot(font_size = 16),
+  plotTSNE(
+    mnn.out,
+    colour_by="ENSG00000177954",
+    by_exprs_values = "reconstructed",
+    text_by=I(clusters.mnn)) +
+    ggtitle("Reconstructed") +
+    theme_cowplot(font_size = 16),
+  ncol=2)
+
 # Grun -------------------------------------------------------------------------
 
 #--- loading ---#
@@ -162,7 +223,7 @@ for.hvg <- sce.seger[,librarySizeFactors(altExp(sce.seger)) > 0
 dec.seger <- modelGeneVarWithSpikes(for.hvg, "ERCC", block=for.hvg$Donor)
 chosen.hvgs <- getTopHVGs(dec.seger, n=2000)
 
-# Application to pancreas data: The Good ---------------------------------------
+# Application to pancreas datasets: The Good -----------------------------------
 
 library(batchelor)
 normed.pancreas <- multiBatchNorm(sce.grun2, sce.muraro2)
@@ -199,29 +260,7 @@ tab
 mnn.pancreas <- runTSNE(mnn.pancreas, dimred="corrected")
 plotTSNE(mnn.pancreas, colour_by="batch")
 
-# My summary plot
-uncorrected.pancreas <- noCorrect(sce.grun2, sce.muraro2)
-set.seed(1001011)
-uncorrected.pancreas <- runPCA(uncorrected.pancreas, subset_row=chosen.genes,
-                            exprs_values="merged")
-uncorrected.pancreas <- runTSNE(uncorrected.pancreas, dimred="PCA")
-uncorrected.pancreas$batch <- factor(
-  ifelse(uncorrected.pancreas$batch == 1, "Grun", "Muraro"))
-cowplot::plot_grid(
-  plotTSNE(uncorrected.pancreas, colour_by="batch") +
-    ggtitle("Uncorrected") +
-    cowplot::theme_cowplot(font_size = 20),
-  plotTSNE(rescaled.pancreas, colour_by="batch") +
-    ggtitle("Linear regression") +
-    cowplot::theme_cowplot(font_size = 20),
-  plotTSNE(mnn.pancreas, colour_by="batch") +
-    ggtitle("MNN") +
-    cowplot::theme_cowplot(font_size = 20),
-  ncol = 3)
-
-# Application to pancreas data: The Bad ----------------------------------------
-
-# NOTE: These results look different to OSCA.
+# Application to pancreas datasets: The Bad ------------------------------------
 
 all.sce <- list(Grun=sce.grun, Muraro=sce.muraro,
                 Lawlor=sce.lawlor, Seger=sce.seger)
@@ -237,9 +276,17 @@ combined.pan <- do.call(combineVar, all.dec)
 chosen.genes <- rownames(combined.pan)[combined.pan$bio > 0]
 
 set.seed(1011110)
+# NOTE: Had to modify this step, presumably due to different versions of BioC.
 # mnn.pancreas <- fastMNN(normed.pancreas)
-mnn.pancreas <- fastMNN(
-  normed.pancreas$Grun, normed.pancreas$Muraro, normed.pancreas$Lawlor, normed.pancreas$Seger)
+mnn.pancreas <- fastMNN(normed.pancreas$Grun, normed.pancreas$Muraro, normed.pancreas$Lawlor, normed.pancreas$Seger)
+
+# Bumping up 'k' to get broader clusters for this demonstration.
+snn.gr <- buildSNNGraph(mnn.pancreas, use.dimred="corrected", k=20)
+clusters <- igraph::cluster_walktrap(snn.gr)$membership
+clusters <- factor(clusters)
+tab <- table(Cluster=clusters, Batch=mnn.pancreas$batch)
+
+mnn.pancreas <- runTSNE(mnn.pancreas, dimred="corrected")
 # NOTE: Make batch variable a factor
 mnn.pancreas$batch <- factor(
   dplyr::case_when(
@@ -248,63 +295,65 @@ mnn.pancreas$batch <- factor(
     mnn.pancreas$batch == 3 ~ "Lawlor",
     mnn.pancreas$batch == 4 ~ "Seger"))
 
-# Bumping up 'k' to get broader clusters for this demonstration.
-snn.gr <- buildSNNGraph(mnn.pancreas, use.dimred="corrected", k=20)
-clusters <- igraph::cluster_walktrap(snn.gr)$membership
-clusters <- factor(clusters)
-tab <- table(Cluster=clusters, Batch=mnn.pancreas$batch)
-tab
-
-mnn.pancreas <- runTSNE(mnn.pancreas, dimred="corrected")
-gridExtra::grid.arrange(
-  plotTSNE(mnn.pancreas, colour_by="batch", text_by=I(clusters)),
-  plotTSNE(mnn.pancreas, colour_by=I(clusters), text_by=I(clusters)),
-  ncol=2
-)
-
 donors <- c(
   normed.pancreas$Grun$donor,
   normed.pancreas$Muraro$donor,
   normed.pancreas$Lawlor$`islet unos id`,
   normed.pancreas$Seger$Donor
 )
-
 seger.donors <- donors
 seger.donors[mnn.pancreas$batch!="Seger"] <- NA
-plotTSNE(mnn.pancreas, colour_by=I(seger.donors))
 
-# Application to pancreas data: The Ugly ---------------------------------------
+plot_grid(
+  plotTSNE(mnn.pancreas, colour_by="batch", text_by=I(clusters), text_size = 10) +
+    ggtitle("Combined pancreas dataset", subtitle = "Cluster label is shown at the median location across all cells in the cluster") +
+    theme_cowplot(font_size = 20),
+  plotTSNE(mnn.pancreas, colour_by=data.frame(donor = seger.donors),) +
+    theme_cowplot(font_size = 20),
+  ncol = 2,
+  align = "h")
 
-# combined <- noCorrect(normed.pancreas)
-combined <- do.call(noCorrect, normed.pancreas)
+# Application to pancreas datasets: The Ugly -----------------------------------
+
+combined <- noCorrect(normed.pancreas$Grun, normed.pancreas$Muraro, normed.pancreas$Lawlor, normed.pancreas$Seger)
+# NOTE: Make batch variable a factor
+combined$batch <- factor(
+  dplyr::case_when(
+    combined$batch == 1 ~ "Grun",
+    combined$batch == 2 ~ "Muraro",
+    combined$batch == 3 ~ "Lawlor",
+    combined$batch == 4 ~ "Seger"))
 assayNames(combined) <- "logcounts"
 combined$donor <- donors
 
 donors.by.batches <- lapply(split(combined$donor, combined$batch), unique)
-donors.by.batches
-
 ndonors <- rep(lengths(donors.by.batches), lengths(donors.by.batches))
 names(ndonors) <- unlist(donors.by.batches)
-ndonors
 
 set.seed(1010100)
 multiout <- fastMNN(combined, batch=donors, subset.row=chosen.genes,
                     weights=1/ndonors)
 
+
+
+
+
+
+
+
+
+
+
+
+
+donors.per.batch <- split(combined$donor, combined$batch)
+donors.per.batch <- lapply(donors.per.batch, function(x) length(unique(x)))
+
+set.seed(1010100)
+multiout <- fastMNN(combined, batch=combined$donor,
+                    subset.row=chosen.genes, weights=donors.per.batch)
+
 # Renaming metadata fields for easier communication later.
 multiout$dataset <- combined$batch
 multiout$donor <- multiout$batch
 multiout$batch <- NULL
-
-library(scater)
-g <- buildSNNGraph(multiout, use.dimred=1, k=20)
-clusters <- igraph::cluster_walktrap(g)$membership
-tab <- table(clusters, multiout$dataset)
-tab
-
-multiout <- runTSNE(multiout, dimred="corrected")
-gridExtra::grid.arrange(
-  plotTSNE(multiout, colour_by="dataset", text_by=I(clusters)),
-  plotTSNE(multiout, colour_by=data.frame(donor = seger.donors)),
-  ncol=2
-)
