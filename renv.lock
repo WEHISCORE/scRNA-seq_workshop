@@ -199,11 +199,24 @@
       "Repository": "CRAN",
       "Hash": "08588806cba69f04797dab50627428ed"
     },
+    "MouseGastrulationData": {
+      "Package": "MouseGastrulationData",
+      "Version": "1.0.0",
+      "Source": "Bioconductor",
+      "Hash": "23620e9c9b5574ee1d565398b50c8923"
+    },
     "PCAtools": {
       "Package": "PCAtools",
       "Version": "1.2.0",
       "Source": "Bioconductor",
       "Hash": "11f99da28f5a6b766f70be592d8db360"
+    },
+    "Polychrome": {
+      "Package": "Polychrome",
+      "Version": "1.2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a74a81a8a2286481d557bc34bd579aa6"
     },
     "ProtGenerics": {
       "Package": "ProtGenerics",
@@ -357,6 +370,12 @@
       "Version": "1.16.1",
       "Source": "Bioconductor",
       "Hash": "1f4c0859b8f338bd9f8c0b7967e719a3"
+    },
+    "TENxPBMCData": {
+      "Package": "TENxPBMCData",
+      "Version": "1.4.0",
+      "Source": "Bioconductor",
+      "Hash": "7aefab42d1f3786a48a4f0c1172a15e0"
     },
     "XML": {
       "Package": "XML",
@@ -980,6 +999,13 @@
       "Version": "1.14.6",
       "Source": "Bioconductor",
       "Hash": "20ff4807d30e7dfa01912a3396d71981"
+    },
+    "scatterplot3d": {
+      "Package": "scatterplot3d",
+      "Version": "0.3-41",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0d3e8c286b735517c2df4ed48848e732"
     },
     "scran": {
       "Package": "scran",
