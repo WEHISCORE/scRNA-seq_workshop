@@ -155,6 +155,111 @@ common.degs <- sort(table(unlist(degs)),
 setdiff(unique(summed$celltype.mapped),
         names(summaries))
 
+# Differential abundance: overview ---------------------------------------------
+
+abundances <- table(merged$celltype.mapped, merged$sample)
+abundances <- unclass(abundances)
+
+# Performing te DA analysis ----------------------------------------------------
+
+# Attaching some column metadata.
+extra.info <- colData(merged)[match(
+  colnames(abundances), merged$sample),]
+y.ab <- DGEList(abundances, samples=extra.info)
+
+keep <- filterByExpr(y.ab, group=y.ab$samples$tomato)
+y.ab <- y.ab[keep,]
+
+# Construct design matrix, blocking on pool and
+# including term for td-Tomato-status
+design <- model.matrix(
+  ~0 + factor(pool) + factor(tomato),
+  y.ab$samples)
+# Tidy up design matrix column names
+colnames(design) <- gsub(
+  "factor|\\(|\\)|TRUE", "", colnames(design))
+
+# Estimate and plot the negative binomial dispersions
+y.ab <- estimateDisp(y.ab, design, trend="none")
+plotBCV(y.ab, cex=1)
+
+# Estimate and plot the quasi-likelihood dispersions
+fit.ab <- glmQLFit(y.ab, design, robust=TRUE,
+                   abundance.trend=FALSE)
+plotQLDisp(fit.ab, cex=1)
+
+# Test for DA due to td-Tomato-status
+res <- glmQLFTest(fit.ab, coef="tomato")
+# Summarise the results
+summary(decideTests(res))
+# View the top DE genes
+topTags(res)
+
+# Handling composition effects: Assuming most labels don't change --------------
+
+y.ab2 <- calcNormFactors(y.ab)
+y.ab2 <- estimateDisp(y.ab2, design, trend="none")
+fit.ab2 <- glmQLFit(y.ab2, design, robust=TRUE,
+                    abundance.trend=FALSE)
+res2 <- glmQLFTest(fit.ab2, coef=ncol(design))
+topTags(res2)
+
+# Handling composition effects: Removing the offending labels ------------------
+
+offenders <- "ExE ectoderm"
+y.ab3 <- y.ab[setdiff(
+  rownames(y.ab), offenders),, keep.lib.sizes=FALSE]
+
+y.ab3 <- estimateDisp(y.ab3, design, trend="none")
+fit.ab3 <- glmQLFit(y.ab3, design, robust=TRUE,
+                    abundance.trend=FALSE)
+res3 <- glmQLFTest(fit.ab3, coef=ncol(design))
+topTags(res3)
+
+# Illustrative dataset: chimeric mouse embryos (slight return) -----------------
+
+library(MouseGastrulationData)
+sce.tal1 <- Tal1ChimeraData()
+rownames(sce.tal1) <- uniquifyFeatureNames(
+  rowData(sce.tal1)$ENSEMBL,
+  rowData(sce.tal1)$SYMBOL)
+
+# Using 'label' and 'sample' as our two factors; each
+# column of the output corresponds to one unique
+# combination of these two factors.
+summed.tal1 <- aggregateAcrossCells(sce.tal1,
+                                    ids=DataFrame(
+                                      label=sce.tal1$celltype.mapped,
+                                      sample=sce.tal1$sample))
+# Focusing on cells labelled as 'neural crest'
+summed.neural <- summed.tal1[
+  ,summed.tal1$label=="Neural crest"]
+
+# Standard edgeR analysis, as described earlier
+y.neural <- DGEList(counts(summed.neural),
+                    samples=colData(summed.neural))
+keep.neural <- filterByExpr(y.neural,
+                            group=y.neural$samples$tomato)
+y.neural <- y.neural[keep.neural,]
+y.neural <- calcNormFactors(y.neural)
+
+# Samples were processed in 2 blocks
+y.neural$samples$block <- c(1, 2, 1, 2)
+# Construct design matrix, blocking on pool and
+# including term for td-Tomato-status
+design <- model.matrix(
+  ~0 + factor(block) + factor(tomato),
+  y.neural$samples)
+# Tidy up design matrix column names
+colnames(design) <- gsub(
+  "factor|\\(|\\)|TRUE", "", colnames(design))
+
+y.neural <- estimateDisp(y.neural, design)
+fit.neural <- glmQLFit(y.neural, design, robust=TRUE)
+res.neural <- glmQLFTest(fit.neural, coef="tomato")
+
+summary(decideTests(res.neural))
+topTags(res.neural, n=10)
 
 
 
