@@ -255,7 +255,6 @@ mnn.pancreas$batch <- factor(
 snn.gr <- buildSNNGraph(mnn.pancreas, use.dimred="corrected")
 clusters <- igraph::cluster_walktrap(snn.gr)$membership
 tab <- table(Cluster=clusters, Batch=mnn.pancreas$batch)
-tab
 
 mnn.pancreas <- runTSNE(mnn.pancreas, dimred="corrected")
 plotTSNE(mnn.pancreas, colour_by="batch")
@@ -308,7 +307,7 @@ plot_grid(
   plotTSNE(mnn.pancreas, colour_by="batch", text_by=I(clusters), text_size = 10) +
     ggtitle("Combined pancreas dataset", subtitle = "Cluster label is shown at the median location across all cells in the cluster") +
     theme_cowplot(font_size = 20),
-  plotTSNE(mnn.pancreas, colour_by=data.frame(donor = seger.donors),) +
+  plotTSNE(mnn.pancreas, colour_by=data.frame(donor = seger.donors)) +
     theme_cowplot(font_size = 20),
   ncol = 2,
   align = "h")
@@ -334,26 +333,22 @@ set.seed(1010100)
 multiout <- fastMNN(combined, batch=donors, subset.row=chosen.genes,
                     weights=1/ndonors)
 
-
-
-
-
-
-
-
-
-
-
-
-
-donors.per.batch <- split(combined$donor, combined$batch)
-donors.per.batch <- lapply(donors.per.batch, function(x) length(unique(x)))
-
-set.seed(1010100)
-multiout <- fastMNN(combined, batch=combined$donor,
-                    subset.row=chosen.genes, weights=donors.per.batch)
-
 # Renaming metadata fields for easier communication later.
 multiout$dataset <- combined$batch
 multiout$donor <- multiout$batch
 multiout$batch <- NULL
+
+library(scater)
+g <- buildSNNGraph(multiout, use.dimred=1, k=20)
+clusters <- igraph::cluster_walktrap(g)$membership
+tab <- table(clusters, multiout$dataset)
+
+multiout <- runTSNE(multiout, dimred="corrected")
+plot_grid(
+  plotTSNE(multiout, colour_by="dataset", text_by=I(clusters), text_size = 10) +
+    ggtitle("Combined pancreas dataset", subtitle = "Cluster label is shown at the median location across all cells in the cluster") +
+    theme_cowplot(font_size = 20),
+  plotTSNE(multiout, colour_by=data.frame(donor = seger.donors)) +
+    theme_cowplot(font_size = 20),
+  ncol = 2,
+  align = "h")
