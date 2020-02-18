@@ -1,9 +1,8 @@
-# Setup ------------------------------------------------------------------------
-
 library(here)
-library(cowplot)
+source(here("workshop/10_data_integration/code.R"))
 
-source(here("workshop", "10_data_integration", "code.R"))
+library(ggplot2)
+library(cowplot)
 
 # Linear regression vs MNN correction ------------------------------------------
 
