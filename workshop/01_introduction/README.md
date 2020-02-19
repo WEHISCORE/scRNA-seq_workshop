@@ -8,3 +8,4 @@
 - Data processing and downstream analysis
   - Illustrate with quick start example? Or perhaps put this in the recap?
   - Be wary of pseudoalignment methods for snRNA-seq because the default reference won't contain unspliced transcripts (could use a modified index, cf. kalisto + BUStools RNA velocity method)
+- See [https://osca.bioconductor.org/overview.html](https://osca.bioconductor.org/overview.html)
