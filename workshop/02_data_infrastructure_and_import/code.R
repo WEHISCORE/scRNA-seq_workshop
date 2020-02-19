@@ -168,3 +168,109 @@ sizeFactors(sce)
 sizeFactors(sce) <- scater::librarySizeFactors(sce)
 sizeFactors(sce)
 
+# I ran CellRanger -------------------------------------------------------------
+
+# Download example data processed with CellRanger
+# Aside: Using BiocFileCache means we only download the
+#        data once
+library(BiocFileCache)
+bfc <- BiocFileCache()
+pbmc.url <- "http://cf.10xgenomics.com/samples/cell-vdj/3.1.0/vdj_v1_hs_pbmc3/vdj_v1_hs_pbmc3_filtered_feature_bc_matrix.tar.gz"
+pbmc.data <- bfcrpath(bfc, pbmc.url)
+
+# Extract the files to a temporary location
+untar(pbmc.data, exdir=tempdir())
+
+# List the files we downloaded and extracted
+# These files are typically CellRanger outputs
+pbmc.dir <- file.path(tempdir(),
+                      "filtered_feature_bc_matrix")
+list.files(pbmc.dir)
+
+# Import the data as a SingleCellExperiment
+library(DropletUtils)
+sce.pbmc <- read10xCounts(pbmc.dir)
+# Inspect the object we just constructed
+sce.pbmc
+
+# Store the CITE-seq data in an alternative experiment
+sce.pbmc <- splitAltExps(sce.pbmc, rowData(sce.pbmc)$Type)
+# Inspect the object we just updated
+sce.pbmc
+
+# I ran scPipe -----------------------------------------------------------------
+
+# Download example data processed with CellRanger
+# Aside: Using BiocFileCache means we only download the
+#        data once
+library(BiocFileCache)
+bfc <- BiocFileCache()
+sis_seq.url <- "https://github.com/LuyiTian/SIS-seq_script/archive/master.zip"
+sis_seq.data <- bfcrpath(bfc, sis_seq.url)
+
+# Extract the files to a temporary location
+unzip(sis_seq.data, exdir=tempdir())
+
+# List (some of) the files we downloaded and extracted
+# These files are typical scPipe outputs
+sis_seq.dir <- file.path(tempdir(),
+                         "SIS-seq_script-master", "data", "BcorKO_scRNAseq",
+                         "RPI10")
+list.files(sis_seq.dir)
+
+# Import the data as a SingleCellExperiment
+library(scPipe)
+sce.sis_seq <- create_sce_by_dir(sis_seq.dir)
+# Inspect the object we just constructed
+sce.sis_seq
+
+# I got a bunch of files -------------------------------------------------------
+
+# Download example bunch o' files dataset
+library(BiocFileCache)
+bfc <- BiocFileCache()
+lun_counts.url <- "https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-5522/E-MTAB-5522.processed.1.zip"
+lun_counts.data <- bfcrpath(bfc, lun_counts.url)
+lun_coldata.url <- "https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-5522/E-MTAB-5522.sdrf.txt"
+lun_coldata.data <- bfcrpath(bfc, lun_coldata.url)
+
+# Extract the counts files to a temporary location
+lun_counts.dir <- tempfile("lun_counts.")
+unzip(lun_counts.data, exdir=lun_counts.dir)
+
+# List the files we downloaded and extracted
+list.files(lun_counts.dir)
+
+# Import the count matrix (for 1 plate)
+lun.counts <- read.delim(
+  file.path(lun_counts.dir, "counts_Calero_20160113.tsv"),
+  header=TRUE,
+  row.names=1,
+  check.names=FALSE)
+# Store the gene lengths for later
+gene.lengths <- lun.counts$Length
+# Convert the gene counts to a matrix
+lun.counts <- as.matrix(lun.counts[, -1])
+
+# Import the sample metadata
+lun.coldata <- read.delim(lun_coldata.data,
+                          check.names=FALSE, stringsAsFactors=FALSE)
+library(S4Vectors)
+lun.coldata <- as(lun.coldata, "DataFrame")
+
+# Match up the sample metadata to the counts matrix
+m <- match(
+  colnames(lun.counts),
+  lun.coldata$`Source Name`)
+lun.coldata <- lun.coldata[m, ]
+
+# Construct the feature metadata
+lun.rowdata <- DataFrame(Length = gene.lengths)
+
+# Construct the SingleCellExperiment
+lun.sce <- SingleCellExperiment(
+  assays = list(assays = lun.counts),
+  colData = lun.coldata,
+  rowData = lun.rowdata)
+# Inspect the object we just constructed
+lun.sce
