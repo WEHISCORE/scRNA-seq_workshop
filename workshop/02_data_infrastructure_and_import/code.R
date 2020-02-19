@@ -132,4 +132,39 @@ reducedDim(sce, "UMAP") <- u
 # List the dimensionality reduction results stored in # the object
 reducedDims(sce)
 
-# -------------------------
+# Adding an alternative experiment ---------------------------------------------
+
+# Extract the ERCC SCE from the 416b dataset
+ercc.sce.416b <- altExp(sce.416b, "ERCC")
+# Inspect the ERCC SCE
+ercc.sce.416b
+
+# Add the ERCC SCE as an alternative experiment to our SCE
+altExp(sce, "ERCC") <- ercc.sce.416b
+# Inspect the object we just updated
+sce
+# List the alternative experiments stored in the object
+altExps(sce)
+
+# Why use alternative experiments? ---------------------------------------------
+
+# Subsetting the SCE by sample also subsets the
+# alternative experiments
+sce.subset <- sce[, 1:10]
+ncol(sce.subset)
+ncol(altExp(sce.subset))
+
+# Adding size factors ----------------------------------------------------------
+
+# Extract existing size factors (these were added
+# when we ran scater::logNormCounts(sce))
+sizeFactors(sce)
+
+# 'Automatically' replace size factors
+sce <- scran::computeSumFactors(sce)
+sizeFactors(sce)
+
+# 'Manually' replace size factors
+sizeFactors(sce) <- scater::librarySizeFactors(sce)
+sizeFactors(sce)
+
