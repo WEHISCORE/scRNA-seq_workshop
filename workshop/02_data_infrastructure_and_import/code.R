@@ -124,7 +124,7 @@ sce
 reducedDim(sce, "TSNE")
 
 # 'Manually' compute UMAP
-u <- uwot::uwap(t(logcounts(sce)), n_component=2)
+u <- uwot::umap(t(logcounts(sce)), n_component=2)
 # Add the UMAP matrix to the reducedDims slot
 # Access the t-SNE matrix from the reducedDims slot
 reducedDim(sce, "UMAP") <- u
