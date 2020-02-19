@@ -2,3 +2,4 @@
 # TODO: Switch to dev version of renv and include 'Suggests' in renv.lock
 library(Rtsne)
 library(uwot)
+library(GO.db)
