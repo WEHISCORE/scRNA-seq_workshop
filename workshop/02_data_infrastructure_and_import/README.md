@@ -24,7 +24,3 @@
     - `spikeNames()`(?)
     - `altExps()`
     - `sizeFactors()`(?)
-    
-# TODOs
-
-- [ ] Should I show an example SCE before constructing one?
