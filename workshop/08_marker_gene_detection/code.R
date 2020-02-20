@@ -151,7 +151,67 @@ plotExpression(sce.pbmc, x="cluster", features=top.genes)
 
 # Illustrative dataset: 416B ---------------------------------------------------
 
-# TODO: Need to insert this code if I want to include the subsequent example
+library(scRNAseq)
+sce.416b <- LunSpikeInData(which="416b")
+sce.416b$block <- factor(sce.416b$block)
+
+# gene-annotation
+library(AnnotationHub)
+ens.mm.v97 <- AnnotationHub()[["AH73905"]]
+rowData(sce.416b)$ENSEMBL <- rownames(sce.416b)
+rowData(sce.416b)$SYMBOL <- mapIds(ens.mm.v97,
+                                   keys=rownames(sce.416b),
+                                   keytype="GENEID", column="SYMBOL")
+rowData(sce.416b)$SEQNAME <- mapIds(ens.mm.v97,
+                                    keys=rownames(sce.416b),
+                                    keytype="GENEID", column="SEQNAME")
+library(scater)
+rownames(sce.416b) <- uniquifyFeatureNames(rowData(sce.416b)$ENSEMBL,
+                                           rowData(sce.416b)$SYMBOL)
+
+# quality-control
+mito <- which(rowData(sce.416b)$SEQNAME=="MT")
+stats <- perCellQCMetrics(sce.416b, subsets=list(Mt=mito))
+qc <- quickPerCellQC(stats,
+                     percent_subsets=c("subsets_Mt_percent", "altexps_ERCC_percent"),
+                     batch=sce.416b$block)
+sce.416b <- sce.416b[,!qc$discard]
+
+# normalization
+library(scran)
+sce.416b <- computeSumFactors(sce.416b)
+sce.416b <- logNormCounts(sce.416b)
+
+# variance-modelling
+dec.416b <- modelGeneVarWithSpikes(sce.416b, "ERCC",
+                                   block=sce.416b$block)
+chosen.hvgs <- getTopHVGs(dec.416b, prop=0.1)
+
+# batch-correction (we'll learn about this later)
+library(limma)
+assay(sce.416b, "corrected") <- removeBatchEffect(
+  logcounts(sce.416b),
+  design=model.matrix(~sce.416b$phenotype),
+  batch=sce.416b$block)
+
+# dimensionality-reduction
+sce.416b <- runPCA(sce.416b, ncomponents=10,
+                   subset_row=chosen.hvgs,
+                   exprs_values="corrected",
+                   BSPARAM=BiocSingular::ExactParam())
+
+set.seed(1010)
+sce.416b <- runTSNE(sce.416b, dimred="PCA", perplexity=10)
+
+# clustering (hierarchical clustering)
+my.dist <- dist(reducedDim(sce.416b, "PCA"))
+my.tree <- hclust(my.dist, method="ward.D2")
+
+library(dynamicTreeCut)
+my.clusters <- unname(
+  cutreeDynamic(my.tree, distM=as.matrix(my.dist),
+                minClusterSize=10, verbose=0))
+sce.416b$cluster <- factor(my.clusters)
 
 # Handling blocking factors ----------------------------------------------------
 
