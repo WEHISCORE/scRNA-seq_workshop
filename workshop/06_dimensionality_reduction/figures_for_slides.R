@@ -1,3 +1,9 @@
+library(here)
+source(here("workshop/06_dimensionality_reduction/code.R"))
+
+library(ggplot2)
+library(cowplot)
+
 # Effect of perplexity on t-SNE ------------------------------------------------
 
 set.seed(100)

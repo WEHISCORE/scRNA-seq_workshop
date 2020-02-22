@@ -1,6 +1,9 @@
 library(here)
 source(here("workshop/07_clustering/code.R"))
 
+library(ggplot2)
+library(cowplot)
+
 # Examples of KNN / SNN graphs and cluster detection ---------------------------
 
 sce.pbmc.subset <- sce.pbmc[, 1:20]
@@ -29,14 +32,11 @@ plot(g3, main = "SNN: k = 3", edge.width = igraph::E(g3)$weight, vertex.color = 
 
 # Naive comparison of scran-style and Seurat-style clustering ------------------
 
-cowplot::plot_grid(
+plot_grid(
   plotReducedDim(sce.pbmc, "TSNE", colour_by="cluster") +
     ggtitle("scran-style") +
-    cowplot::theme_cowplot(font_size = 16),
+    theme_cowplot(font_size = 16),
   plotReducedDim(sce.pbmc, "TSNE", colour_by="cluster2") +
-    cowplot::theme_cowplot(font_size = 16) +
+    theme_cowplot(font_size = 16) +
     ggtitle("Seurat-style"),
   ncol = 2)
-
-
-

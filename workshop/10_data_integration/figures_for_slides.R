@@ -60,11 +60,11 @@ plot_grid(
 
 # Grun -------------------------------------------------------------------------
 
-#--- loading ---#
+# loading
 library(scRNAseq)
 sce.grun <- GrunPancreasData()
 
-#--- gene-annotation ---#
+# gene-annotation
 library(org.Hs.eg.db)
 gene.ids <- mapIds(org.Hs.eg.db, keys=rowData(sce.grun)$symbol,
                    keytype="SYMBOL", column="ENSEMBL")
@@ -73,7 +73,7 @@ keep <- !is.na(gene.ids) & !duplicated(gene.ids)
 sce.grun <- sce.grun[keep,]
 rownames(sce.grun) <- gene.ids[keep]
 
-#--- quality-control ---#
+# quality-control
 library(scater)
 stats <- perCellQCMetrics(sce.grun)
 
@@ -83,25 +83,25 @@ qc <- quickPerCellQC(stats, percent_subsets="altexps_ERCC_percent",
 
 sce.grun <- sce.grun[,!qc$discard]
 
-#--- normalization ---#
+# normalization
 library(scran)
 set.seed(1000) # for irlba.
 clusters <- quickCluster(sce.grun)
 sce.grun <- computeSumFactors(sce.grun, clusters=clusters)
 sce.grun <- logNormCounts(sce.grun)
 
-#--- variance-modelling ---#
+# variance-modelling
 block <- paste0(sce.grun$sample, "_", sce.grun$donor)
 dec.grun <- modelGeneVarWithSpikes(sce.grun, spikes="ERCC", block=block)
 top.grun <- getTopHVGs(dec.grun, prop=0.1)
 
 # Muraro -----------------------------------------------------------------------
 
-#--- loading ---#
+# loading
 library(scRNAseq)
 sce.muraro <- MuraroPancreasData()
 
-#--- gene-annotation ---#
+# gene-annotation
 library(AnnotationHub)
 edb <- AnnotationHub()[["AH73881"]]
 gene.symb <- sub("__chr.*$", "", rownames(sce.muraro))
@@ -113,21 +113,21 @@ keep <- !is.na(gene.ids) & !duplicated(gene.ids)
 sce.muraro <- sce.muraro[keep,]
 rownames(sce.muraro) <- gene.ids[keep]
 
-#--- quality-control ---#
+# quality-control
 library(scater)
 stats <- perCellQCMetrics(sce.muraro)
 qc <- quickPerCellQC(stats, percent_subsets="altexps_ERCC_percent",
                      batch=sce.muraro$donor, subset=sce.muraro$donor!="D28")
 sce.muraro <- sce.muraro[,!qc$discard]
 
-#--- normalization ---#
+# normalization
 library(scran)
 set.seed(1000)
 clusters <- quickCluster(sce.muraro)
 sce.muraro <- computeSumFactors(sce.muraro, clusters=clusters)
 sce.muraro <- logNormCounts(sce.muraro)
 
-#--- variance-modelling ---#
+# variance-modelling
 block <- paste0(sce.muraro$plate, "_", sce.muraro$donor)
 dec.muraro <- modelGeneVarWithSpikes(sce.muraro, "ERCC", block=block)
 top.muraro <- getTopHVGs(dec.muraro, prop=0.1)
@@ -140,18 +140,18 @@ dec.muraro2 <- dec.muraro[universe,]
 
 # Lawlor -----------------------------------------------------------------------
 
-#--- loading ---#
+# loading
 library(scRNAseq)
 sce.lawlor <- LawlorPancreasData()
 
-#--- gene-annotation ---#
+# gene-annotation
 library(AnnotationHub)
 edb <- AnnotationHub()[["AH73881"]]
 anno <- select(edb, keys=rownames(sce.lawlor), keytype="GENEID",
                columns=c("SYMBOL", "SEQNAME"))
 rowData(sce.lawlor) <- anno[match(rownames(sce.lawlor), anno[,1]),-1]
 
-#--- quality-control ---#
+# quality-control
 library(scater)
 stats <- perCellQCMetrics(sce.lawlor,
                           subsets=list(Mito=which(rowData(sce.lawlor)$SEQNAME=="MT")))
@@ -159,24 +159,24 @@ qc <- quickPerCellQC(stats, percent_subsets="subsets_Mito_percent",
                      batch=sce.lawlor$`islet unos id`)
 sce.lawlor <- sce.lawlor[,!qc$discard]
 
-#--- normalization ---#
+# normalization
 library(scran)
 set.seed(1000)
 clusters <- quickCluster(sce.lawlor)
 sce.lawlor <- computeSumFactors(sce.lawlor, clusters=clusters)
 sce.lawlor <- logNormCounts(sce.lawlor)
 
-#--- variance-modelling ---#
+# variance-modelling
 dec.lawlor <- modelGeneVar(sce.lawlor, block=sce.lawlor$`islet unos id`)
 chosen.genes <- getTopHVGs(dec.lawlor, n=2000)
 
 # Seger ------------------------------------------------------------------------
 
-#--- loading ---#
+# loading
 library(scRNAseq)
 sce.seger <- SegerstolpePancreasData()
 
-#--- gene-annotation ---#
+# gene-annotation
 library(AnnotationHub)
 edb <- AnnotationHub()[["AH73881"]]
 symbols <- rowData(sce.seger)$symbol
@@ -188,7 +188,7 @@ keep <- !duplicated(ens.id)
 sce.seger <- sce.seger[keep,]
 rownames(sce.seger) <- ens.id[keep]
 
-#--- sample-annotation ---#
+# sample-annotation
 emtab.meta <- colData(sce.seger)[,c("cell type",
                                     "individual", "single cell well quality")]
 colnames(emtab.meta) <- c("CellType", "Donor", "Quality")
@@ -199,7 +199,7 @@ sce.seger$CellType <- paste0(
   toupper(substr(sce.seger$CellType, 1, 1)),
   substring(sce.seger$CellType, 2))
 
-#--- quality-control ---#
+# quality-control
 low.qual <- sce.seger$Quality == "low quality cell"
 
 library(scater)
@@ -210,13 +210,13 @@ qc <- quickPerCellQC(stats, percent_subsets="altexps_ERCC_percent",
 
 sce.seger <- sce.seger[,!(qc$discard | low.qual)]
 
-#--- normalization ---#
+# normalization
 library(scran)
 clusters <- quickCluster(sce.seger)
 sce.seger <- computeSumFactors(sce.seger, clusters=clusters)
 sce.seger <- logNormCounts(sce.seger)
 
-#--- variance-modelling ---#
+# variance-modelling
 for.hvg <- sce.seger[,librarySizeFactors(altExp(sce.seger)) > 0
                      & sce.seger$Donor!="AZ"]
 dec.seger <- modelGeneVarWithSpikes(for.hvg, "ERCC", block=for.hvg$Donor)
@@ -266,8 +266,9 @@ all.dec <- list(Grun=dec.grun, Muraro=dec.muraro,
                 Lawlor=dec.lawlor, Seger=dec.seger)
 
 universe <- Reduce(intersect, lapply(all.sce, rownames))
-all.sce <- lapply(all.sce, "[", i=universe,)
-all.dec <- lapply(all.dec, "[", i=universe,)
+# NOTE: This isn't a typo in the next 2 lines; the 'j' index is 'missing'.
+all.sce <- lapply(all.sce, "[", i=universe, )
+all.dec <- lapply(all.dec, "[", i=universe, )
 
 normed.pancreas <- do.call(multiBatchNorm, all.sce)
 combined.pan <- do.call(combineVar, all.dec)

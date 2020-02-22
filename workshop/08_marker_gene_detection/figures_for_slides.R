@@ -1,6 +1,9 @@
 library(here)
 source(here("workshop/08_marker_gene_detection/code.R"))
 
+library(ggplot2)
+library(cowplot)
+
 # Illustration of looking at expression of each gene by cluster ----------------
 
 # NOTE: These plots were copied to clipboard at 1500 x 800 resolution.
@@ -10,31 +13,31 @@ plotExpression(
   features = rownames(sce.pbmc)[1],
   x = "cluster",
   colour_by = "cluster") +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 plotExpression(
   sce.pbmc,
   features = rownames(sce.pbmc)[2],
   x = "cluster",
   colour_by = "cluster") +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 plotExpression(
   sce.pbmc,
   features = "PTPRC",
   x = "cluster",
   colour_by = "cluster") +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 plotExpression(
   sce.pbmc,
   features = "PF4",
   x = "cluster",
   colour_by = "cluster") +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 plotExpression(
   sce.pbmc,
   features = "CD3E",
   x = "cluster",
   colour_by = "cluster") +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 
 # Using pairwise t-tests -------------------------------------------------------
 
@@ -113,16 +116,16 @@ demo2 <- m.out2[["1"]]
 i <- which(demo2$FDR < 0.05 & demo[rownames(demo2), ]$FDR > 0.05)
 
 p1 <- plotExpression(sce.416b, features=rownames(demo2)[i[1]],
-               x="cluster", colour_by="cluster") +
-  cowplot::theme_cowplot(font_size = 20) +
+                     x="cluster", colour_by="cluster") +
+  theme_cowplot(font_size = 20) +
   ggtitle("Ignoring experimental blocks")
 p2 <- plotExpression(sce.416b, features=rownames(demo2)[i[1]],
-               x="cluster", colour_by="cluster", other_fields = "block") +
+                     x="cluster", colour_by="cluster", other_fields = "block") +
   facet_grid(~ block) +
-  cowplot::theme_cowplot(font_size = 20) +
+  theme_cowplot(font_size = 20) +
   ggtitle("Accounting for experimental blocks")
 
-cowplot::plot_grid(p1, p2, ncol = 1)
+plot_grid(p1, p2, ncol = 1)
 
 # Invalidity of P-values -------------------------------------------------------
 

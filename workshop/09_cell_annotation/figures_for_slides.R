@@ -1,6 +1,9 @@
 library(here)
 source(here("workshop/09_cell_annotation/code.R"))
 
+library(ggplot2)
+library(cowplot)
+
 # Comparing to clustering ------------------------------------------------------
 
 cluster_colours <- setNames(
@@ -13,7 +16,7 @@ plotTSNE(sce.pbmc, other_fields = "cluster") +
   scale_fill_manual(values = cluster_colours) +
   scale_colour_manual(values = cluster_colours) +
   guides(fill = FALSE, colour = FALSE) +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)
 
 plotScoreHeatmap(pred, clusters = sce.pbmc$cluster, order.by.clusters = TRUE, annotation_colors = list(Clusters = cluster_colours),
                  annotation_legend = FALSE, legend = FALSE)
@@ -23,4 +26,4 @@ plotTSNE(sce.pbmc, colour_by = "cluster", text_by = I(abbreviate(pred$labels, mi
   scale_fill_manual(values = cluster_colours) +
   scale_colour_manual(values = cluster_colours) +
   guides(fill = FALSE, colour = FALSE) +
-  cowplot::theme_cowplot(font_size = 20)
+  theme_cowplot(font_size = 20)

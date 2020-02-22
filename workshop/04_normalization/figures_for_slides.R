@@ -1,3 +1,9 @@
+library(here)
+source(here("workshop/04_normalization/code.R"))
+
+library(ggplot2)
+library(cowplot)
+
 # Library size factors vs. convolution size factors ----------------------------
 
 # Colouring points using the supplied cell-types
